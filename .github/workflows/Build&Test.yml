@@ -121,7 +121,7 @@ jobs:
           $Env:Path="${{env.MSBuildBinPath}};${{env.LatestVisualStudioRoot}}\Common7\IDE\CommonExtensions\Microsoft\TestWindow;" + $Env:Path
 
           # 编译项目
-          &msbuild Build.proj "-m" "-p:TagVersion=${{env.BuildVersion}}"
+          &msbuild /maxCpuCount:8 Build.proj "-m" "-p:TagVersion=${{env.BuildVersion}}"
           if($lastexitcode -ne 0)
           {
               throw "VC-LTL.vcxproj编译失败！退出代码：$lastexitcode"
@@ -139,7 +139,7 @@ jobs:
           $Env:PROCDUMP_PATH="$Env:GITHUB_WORKSPACE\Tools"
 
           # 编译单元测试项目
-          &msbuild UnitTest\UnitTest.vcxproj "-p:Configuration=Static;Platform=Win32;SolutionDir=$Env:GITHUB_WORKSPACE\\"
+          &msbuild /maxCpuCount:8 UnitTest\UnitTest.vcxproj "-p:Configuration=Static;Platform=Win32;SolutionDir=$Env:GITHUB_WORKSPACE\\"
           if($lastexitcode -ne 0)
           {
               throw "单元测试编译失败！退出代码：$lastexitcode"
